@@ -1,10 +1,11 @@
-extends Node2D		
+extends CharacterBody2D		
 
 signal hit
 @onready var tile_map =  $"../TileMap2"
 @onready var player_sprite = $Sprite2D
 @onready var bridge =  $"../bridge"
-
+var on_bridge = false
+var platform_velocity = Vector2.ZERO
 var is_moving = false
 func _physics_process(delta: float) -> void:
 	if is_moving == false:
@@ -12,6 +13,24 @@ func _physics_process(delta: float) -> void:
 	if global_position == player_sprite.global_position:
 		is_moving = false
 		return
+	# Get platform velocity if standing on a platform
+	if is_on_floor():
+		
+		platform_velocity = get_platform_velocity()
+		print(platform_velocity)
+	else:
+		platform_velocity = Vector2.ZERO
+
+	# Add platform velocity to character's movement
+	velocity.x += platform_velocity.x
+
+
+	
+		
+		
+	
+		
+		
 	player_sprite.global_position = player_sprite.global_position.move_toward(global_position,1)
 	
 func _process(delta: float) -> void:
@@ -48,8 +67,12 @@ func move(direction: Vector2):
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.is_in_group("bridge"):
+	if body is AnimatableBody2D:
+		on_bridge = true
+		print("hit bridge")
 		return
+	print(body)
+	print(body.get_groups())
 	print("hit")	
 	hide()
 	hit.emit()
@@ -61,3 +84,11 @@ func start(pos):
 	show()
 	await get_tree().create_timer(0.5).timeout
 	$Area2D/CollisionShape2D.disabled = false
+
+
+func _on_area_2d_body_exited(body: Node2D) -> void:
+	if body.is_in_group("bridge"):
+		on_bridge = false
+		print("exit bridge")
+		return
+	pass # Replace with function body.
