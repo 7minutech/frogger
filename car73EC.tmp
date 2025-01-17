@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://bdu75d41p6jjp"]
+
+[ext_resource type="Script" path="res://car.gd" id="1_gm2n8"]
+[ext_resource type="Texture2D" uid="uid://bdvgn2urekxi2" path="res://assests/kenney_rpgUrbanKit/Tilemap/tilemap_packed.png" id="2_of25k"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ogy0r"]
+atlas = ExtResource("2_of25k")
+region = Rect2(240, 256, 32, 32)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c6eqi"]
+radius = 8.0
+height = 16.0
+
+[node name="Car" type="RigidBody2D"]
+position = Vector2(215, 190)
+collision_mask = 0
+gravity_scale = 0.0
+script = ExtResource("1_gm2n8")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_ogy0r")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 6)
+shape = SubResource("CapsuleShape2D_c6eqi")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
+
+[connection signal="screen_exited" from="VisibleOnScreenEnabler2D" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]
