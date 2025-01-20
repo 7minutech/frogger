@@ -3,7 +3,7 @@ extends Node2D
 signal hit
 @onready var tile_map =  $"../TileMap2"
 @onready var player_sprite = $Sprite2D
-@onready var bridge =  $"../bridge"
+
 
 var is_moving = false
 func _physics_process(delta: float) -> void:
